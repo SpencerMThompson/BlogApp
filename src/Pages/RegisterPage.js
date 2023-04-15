@@ -11,6 +11,7 @@ export default function RegisterPage() {
         headers: {'Content-Type':'application/json'},
     });
     console.log(response);
+    // 200 is the successful request code
     if (response.status === 200){
       alert('Registration Successful');
     }else{
