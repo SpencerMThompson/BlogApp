@@ -7,7 +7,7 @@ import Editor from "../Editor";
 
 
 export default function CreatePost(){
-    const [title, setTitle]= useState('');
+    const [title, setTitle] = useState('');
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
     const [files, setFiles] = useState('');
