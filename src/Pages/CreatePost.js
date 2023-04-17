@@ -36,16 +36,23 @@ export default function CreatePost(){
     return(
         <form onSubmit={createNewPost}>
             <input type="title"
+            required
             placeholder={'Title'}
             value={title}
             onChange={ev => setTitle(ev.target.value)}/>
             <input type="summary"
+            required
+
             placeholder={'Summary'}
             value={summary}
             onChange={ev => setSummary(ev.target.value)}/>
             <input type="file"
+            required
+            accept='image/png, image/jpeg, image/webp'
             onChange={ev => (setFiles(ev.target.files))}/>
-         <Editor onChange={setContent} value={content}/>
+         <Editor onChange={setContent} 
+            required
+            value={content}/>
             <button>Create Post</button>
         </form>
     );

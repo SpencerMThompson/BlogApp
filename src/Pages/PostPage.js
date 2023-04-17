@@ -3,12 +3,19 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
-
 export default function PostPage() {
   const { id } = useParams();
   const [postInfo, setPostInfo] = useState(null);
-  const {userInfo} = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+
+  function canEdit() {
+    if (userInfo?.id == postInfo.author._id || userInfo.username == "Admin") {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   useEffect(() => {
     fetch(`http://localhost:4000/post/${id}`).then((response) => {
@@ -18,15 +25,17 @@ export default function PostPage() {
     });
   }, [id]);
 
-  async function fetchDelete(){
-    const response = await fetch(`http://localhost:4000/post/${id}`, {method: 'DELETE'});
-    if(response.ok){
-          setRedirect(true);
-      };
+  async function fetchDelete() {
+    const response = await fetch(`http://localhost:4000/post/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      setRedirect(true);
+    }
   }
-  if(redirect){
-    return <Navigate to={'/'}/>
-}
+  if (redirect) {
+    return <Navigate to={"/"} />;
+  }
   if (!postInfo) {
     return "";
   } else {
@@ -37,15 +46,21 @@ export default function PostPage() {
 
         <time>{format(new Date(postInfo.createdAt), "MMM d, yyyy")}</time>
         <div className="image">
-          <img src={`http://localhost:4000/${postInfo.cover}`} alt="" className="post-image" />
+          <img
+            src={`http://localhost:4000/${postInfo.cover}`}
+            alt=""
+            className="post-image"
+          />
         </div>
-        <div dangerouslySetInnerHTML={{__html:postInfo.content}}/>
-        {userInfo?.id == postInfo.author._id && (
-            <div className="button-row">
-                <Link to={`/edit/${postInfo._id}`} className="edit">Edit Post</Link>
-                <p>\\</p>
-                <button onClick={fetchDelete}>Delete</button>
-            </div>
+        <div dangerouslySetInnerHTML={{ __html: postInfo.content }} />
+        {canEdit() && (
+          <div className="button-row">
+            <Link to={`/edit/${postInfo._id}`} className="edit">
+              Edit Post
+            </Link>
+            <p>\\</p>
+            <button onClick={fetchDelete}>Delete</button>
+          </div>
         )}
       </div>
     );
