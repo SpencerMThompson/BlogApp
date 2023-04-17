@@ -32,19 +32,21 @@ export default function PostPage() {
   } else {
     return (
       <div className="post-page">
-        <h1>{postInfo.title}</h1>
-        <h2>{postInfo.author.username}</h2>
+        <h1 className="post-title">{postInfo.title}</h1>
+        <h2 className="post-author">Written by: {postInfo.author.username}</h2>
+
+        <time>{format(new Date(postInfo.createdAt), "MMM d, yyyy")}</time>
+        <div className="image">
+          <img src={`http://localhost:4000/${postInfo.cover}`} alt="" className="post-image" />
+        </div>
+        <div dangerouslySetInnerHTML={{__html:postInfo.content}}/>
         {userInfo?.id == postInfo.author._id && (
             <div className="button-row">
                 <Link to={`/edit/${postInfo._id}`} className="edit">Edit Post</Link>
+                <p>\\</p>
                 <button onClick={fetchDelete}>Delete</button>
             </div>
         )}
-        <time>{format(new Date(postInfo.createdAt), "MMM d, yyyy")}</time>
-        <div className="image">
-          <img src={`http://localhost:4000/${postInfo.cover}`} alt="" />
-        </div>
-        <div dangerouslySetInnerHTML={{__html:postInfo.content}}/>
       </div>
     );
   }
